@@ -25,14 +25,23 @@
         this.addPowerValue = function (powerValueToAdd) {
             this.powerValue(powerValueToAdd);
             var item = new TrendItem(powerValueToAdd, new Date());
+            if (this.powerValueList.length > 10) {
+                this.powerValueList.shift();
+            }
             this.powerValueList.push(item);
             this.count = this.count + 1;
+            if (this.powerValueSeries.length > 10) {
+                this.powerValueSeries.shift();
+            }
             this.powerValueSeries.push([item.timestamp.getTime(), item.value]);
+            if (this.averagePowerValueSeries.length > 10) {
+                this.averagePowerValueSeries.shift();
+            }
             this.averagePowerValueSeries.push([item.timestamp.getTime(), this.averagePowerValue()]);
             this.plot.setData([this.powerValueSeries, this.averagePowerValueSeries]);
             this.plot.setupGrid();
             this.plot.draw();
-        };     
+        };
 
         this.averagePowerValue = ko.computed(function () {
             var sum = 0;
